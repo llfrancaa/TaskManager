@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native"
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, FlatList } from "react-native"
 
 import moment from 'moment-timezone'
 import 'moment/locale/pt-br'
@@ -6,18 +6,46 @@ import 'moment/locale/pt-br'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import todayImage from '../../assets/imgs/today.jpg'
+import Task from "../components/Task"
 
 export default function TaskList() {
 
     const today = moment().tz("America/Sao_Paulo")
         .locale("pt-br").format('ddd, D [de] MMMM')
 
+    const tasks = [
+        {
+            id: Math.random(),
+            desc: 'Elabor o MER do TCC',
+            estimateAt: new Date(),
+            doneAt: new Date()
+        },
+        {
+            id: Math.random(),
+            desc: 'Ajustar o FIGMA',
+            estimateAt: new Date(),
+            doneAt: null
+        },
+        {
+            id: Math.random(),
+            desc: 'Revisar a documentação do projeto',
+            estimateAt: new Date(),
+            doneAt: new Date()
+        },
+        {
+            id: Math.random(),
+            desc: 'Organizar o trello',
+            estimateAt: new Date(),
+            doneAt: null
+        }
+    ]
+
     return(
         <View style={styles.container}>
             <ImageBackground source={todayImage} style={styles.background}>
 
                 <View style={styles.iconBar}>
-                    <TouchableOpacity onPress={() => console.log('oi')}>  
+                    <TouchableOpacity onPress={() => console.log('oi')}>
                         <Icon name="eye" size={20} color={'#fff'} />
                     </TouchableOpacity>
                 </View>
@@ -29,7 +57,11 @@ export default function TaskList() {
 
             </ImageBackground>
             <View style={styles.taskList}>
-                <Text>Task #01</Text>
+                <FlatList 
+                    data={tasks}
+                    kayEXtractor={item => `${item.id}`}
+                    renderItem={({item}) => <Task{...item} />}
+                />
             </View>
 
             <TouchableOpacity style={styles.addButton}
@@ -73,7 +105,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 30,
         bottom: 30,
-        width:50,
+        width: 50,
         height: 50,
         borderRadius: 25,
         backgroundColor: '#B13B44',
